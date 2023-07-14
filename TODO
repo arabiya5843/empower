@@ -1,6 +1,5 @@
 1) these features should be done for a month
 
-models, CRUD, serializer, url
 login, register
 filter, search
 permission

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'drf_yasg',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -74,14 +75,14 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'root.wsgi.application'
-
+AUTH_USER_MODEL = 'user.User'
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': '',
+        'NAME': 'empower',
         'USER': 'postgres',
-        'PASSWORD': '',
+        'PASSWORD': '1',
         'HOST': 'localhost',
         'PORT': 5432
     }

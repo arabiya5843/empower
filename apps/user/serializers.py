@@ -1,15 +1,14 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
-from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.user.models import User
+from apps.user.models import User, Experience, Ability
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ['url', 'username', 'email', 'first_name', 'last_name', 'password']
+        fields = ['url', 'username', 'phone_number', 'first_name', 'last_name', 'password']
 
 
 class LoginSerializer(TokenObtainPairSerializer):
@@ -30,14 +29,14 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 
 class RegisterSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True,
-                                   validators=[validators.UniqueValidator(queryset=User.objects.all())])
+    phone_number = serializers.CharField(required=True,
+                                   validators=[validators.UniqueValidator(queryset=User.objects)])
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'email', 'password', 'password2', 'first_name', 'last_name')
+        fields = ('username', 'phone_number', 'password', 'password2', 'first_name', 'last_name')
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True}
@@ -52,7 +51,7 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create(
             username=validated_data['username'],
-            email=validated_data['email'],
+            phone_number=validated_data['phone_number'],
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name']
         )
@@ -97,11 +96,11 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class UpdateUserSerializer(serializers.ModelSerializer):
-    email = serializers.EmailField(required=True)
+    phone_number = serializers.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email',)
+        fields = ('username', 'first_name', 'last_name', 'phone_number')
         extra_kwargs = {
             'first_name': {'required': True},
             'last_name': {'required': True},
@@ -113,10 +112,10 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"username": "This username is already in use."})
         return value
 
-    def validate_email(self, value):
+    def validate_phone_number(self, value):
         user = self.context['request'].user
-        if User.objects.exclude(pk=user.pk).filter(email=value).exists():
-            raise serializers.ValidationError({"email": "This email is already in use."})
+        if User.objects.exclude(pk=user.pk).filter(phone_number=value).exists():
+            raise serializers.ValidationError({"phone number": "This phone number is already in use."})
         return value
 
     def update(self, instance, validated_data):
@@ -127,7 +126,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
 
         instance.first_name = validated_data['first_name']
         instance.last_name = validated_data['last_name']
-        instance.email = validated_data['email']
+        instance.phone_number = validated_data['phone_number']
         instance.username = validated_data['username']
 
         instance.save()
@@ -135,13 +134,26 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class EmployeeModelSerializer(ModelSerializer):
+class EmployeeModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'password')
+        fields = ('first_name', 'last_name', 'phone_number', 'password')
 
 
-class EmployerModelSerializer(ModelSerializer):
+class EmployerModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'password', 'date_joined')
+        fields = ('first_name', 'last_name', 'phone_number', 'password', 'date_joined')
+
+
+class ExperienceModelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Experience
+        fields = ('profession', 'company', 'date', 'description', 'user')
+
+
+class AbilityModelSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Ability
+        fields = ('title', 'description')

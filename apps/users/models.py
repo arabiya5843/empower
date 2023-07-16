@@ -15,7 +15,7 @@ class Ability(Model):
 
 class User(AbstractUser):
 
-    profile_image = ImageField(upload_to='apps/user/user_images/')
+    profile_image = ImageField(upload_to='apps/users/user_images/')
     job = CharField(max_length=50, default='')
     instagram_profile = URLField(max_length=100, default='')
     facebook_profile = URLField(max_length=100, default='')

@@ -3,9 +3,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt import views
 
-from apps.user.models import User, Experience, Ability
-from apps.user.permissions import IsAdminUser
-from apps.user.serializers import UserSerializer, EmployerModelSerializer, EmployeeModelSerializer, LoginSerializer, \
+from apps.users.models import User, Experience, Ability
+from apps.users.permissions import IsAdminUser
+from apps.users.serializers import UserSerializer, EmployerModelSerializer, EmployeeModelSerializer, LoginSerializer, \
     RegisterSerializer, ChangePasswordSerializer, UpdateUserSerializer, ExperienceModelSerializer, AbilityModelSerializer
 
 

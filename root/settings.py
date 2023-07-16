@@ -23,7 +23,7 @@ INSTALLED_APPS = [
 
 
     # My apps
-    'apps.user',
+    'apps.users',
     'apps',
 
     # ####
@@ -62,7 +62,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'root.wsgi.application'
-AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'users.User'
 
 DATABASES = {
     'default': {

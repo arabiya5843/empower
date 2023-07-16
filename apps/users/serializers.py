@@ -2,7 +2,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers, validators
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.user.models import User, Experience, Ability
+from apps.users.models import User, Experience, Ability
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -87,7 +87,7 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+            raise serializers.ValidationError({"authorize": "You dont have permission for this users."})
 
         instance.set_password(validated_data['password'])
         instance.save()
@@ -122,7 +122,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         user = self.context['request'].user
 
         if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this user."})
+            raise serializers.ValidationError({"authorize": "You dont have permission for this users."})
 
         instance.first_name = validated_data['first_name']
         instance.last_name = validated_data['last_name']
@@ -150,7 +150,7 @@ class ExperienceModelSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Experience
-        fields = ('profession', 'company', 'date', 'description', 'user')
+        fields = ('profession', 'company', 'date', 'description', 'users')
 
 
 class AbilityModelSerializer(serializers.ModelSerializer):

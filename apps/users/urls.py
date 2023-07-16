@@ -2,7 +2,7 @@ from django.urls import path, include, re_path
 from rest_framework import routers
 from rest_framework_simplejwt.views import TokenRefreshView, TokenBlacklistView
 
-from apps.user.views import LoginView, RegisterView, ChangePasswordView, UpdateProfileView
+from apps.users.views import LoginView, RegisterView, ChangePasswordView, UpdateProfileView
 
 router = routers.DefaultRouter()
 

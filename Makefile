@@ -1,9 +1,14 @@
 mig:
-	python3 manage.py makemigrations
-	python3 manage.py migrate
+	@echo "Running database migrations..."
+	@python manage.py makemigrations
+	@python manage.py migrate
 
 admin:
-	./manage.py createsuperuser
+	@echo "Creating superuser for the admin panel..."
+	@./manage.py createsuperuser
+	@echo "Superuser created."
 
 unmig:
+	@echo "Deleting database migrations except __init__.py..."
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
+	@echo "Database migrations deleted."

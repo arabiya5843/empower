@@ -1,15 +1,12 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-
-from apps.users.views import UserViewSet, EmployeeModelViewSet, EmployerModelViewSet
-
-router = DefaultRouter()
-router.register('users', UserViewSet, 'users')
-router.register('employee', EmployeeModelViewSet, 'employee')
-router.register('employer', EmployerModelViewSet, 'employer')
-
 
 urlpatterns = [
-    path('', include(router.urls)),
+    # Users
     path('auth/', include('apps.users.urls')),
+
+    # Employment
+    path('', include('apps.employment.urls')),
+
+    # Orders
+    path('', include('apps.orders.urls'))
 ]

@@ -2,16 +2,20 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+from shared.django import os_environ_get
+
+# Load env
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-d3!b^5iqw6y2r^+z@gpb1%)w57_^des53bhwf(ssvjz0hd+!yg'
+SECRET_KEY = os_environ_get('DJANGO_SECRET_KEY')
 
-
-DEBUG = True
+DEBUG = os_environ_get('DEBUG')
 
 ALLOWED_HOSTS = ['*']
-
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -21,16 +25,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-
     # My apps
-    'apps.users',
-    'apps',
+    'apps.users',       # Custom user model and user-related functionality
+    'apps.employment',  # Functionality related to job vacancies, responsibilities, etc.
+    'apps.orders',      # Functionality related to user cards and orders
 
-    # ####
-    'rest_framework',
-    'rest_framework_simplejwt',
-    'drf_yasg',
-    'django_filters',
+    # Third party apps
+    'rest_framework',           # Django Rest Framework for building APIs
+    'rest_framework_simplejwt',  # JWT-based authentication for Django Rest Framework
+    'drf_yasg',                 # Yet Another Swagger Generator for Django Rest Framework
+    'django_filters',           # Filter support for Django Rest Framework
 ]
 
 MIDDLEWARE = [
@@ -62,20 +66,20 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'root.wsgi.application'
-AUTH_USER_MODEL = 'users.User'
+AUTH_USER_MODEL = 'users.User'  # Custom user model
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'empower',
-        'USER': 'postgres',
-        'PASSWORD': '1',
-        'HOST': 'localhost',
-        'PORT': 5432
+        'ENGINE': os_environ_get('DATABASE_ENGINE'),
+        'NAME': os_environ_get('POSTGRES_DB'),
+        'USER': os_environ_get('POSTGRES_USER'),
+        'PASSWORD': os_environ_get('POSTGRES_PASSWORD'),
+        'HOST': os_environ_get('DATABASE_HOST'),
+        'PORT': os_environ_get('DATABASE_PORT'),
     }
 }
 
-
+# Password validation settings
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -91,44 +95,27 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
 USE_TZ = True
 
-
 STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR / 'static')
 
 MEDIA_URL = 'media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = os.path.join(BASE_DIR / 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Django Rest Framework settings
 REST_FRAMEWORK = {
-
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
-        'rest_framework.permissions.IsAuthenticated',
-
-    ],
-
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-        'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
-
     ),
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'DATETIME_FORMAT': '%Y-%m-%d %H:%M:%S'
 }
 
-
+# Swagger settings
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'api_key': {
@@ -139,4 +126,10 @@ SWAGGER_SETTINGS = {
     },
 }
 
-
+# JWT settings
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),  # Time for Access Token
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Time for Refresh Token
+    'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': timedelta(minutes=5),
+    # Period after Access Token expires when Refresh Token is still valid (default 5 minutes)
+}

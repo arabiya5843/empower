@@ -1,23 +1,18 @@
 from django.contrib.auth.password_validation import validate_password
-from rest_framework import serializers, validators
+from rest_framework.exceptions import ValidationError
+from rest_framework.fields import CharField
+from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from apps.users.models import User, Experience, Ability
-
-
-class UserSerializer(serializers.HyperlinkedModelSerializer):
-    class Meta:
-        model = User
-        fields = ['url', 'username', 'phone_number', 'first_name', 'last_name', 'password']
+from apps.users.models import User
 
 
 class LoginSerializer(TokenObtainPairSerializer):
 
-    def create(self, validated_data):
-        pass
-
-    def update(self, instance, validated_data):
-        pass
+    def validate(self, attrs):
+        if User.objects.filter(username=attrs.get('username')).exists():
+            return super().validate(attrs)
+        raise ValidationError({"Not Found": "User with this username not found!"})
 
     @classmethod
     def get_token(cls, user):
@@ -28,23 +23,19 @@ class LoginSerializer(TokenObtainPairSerializer):
         return token
 
 
-class RegisterSerializer(serializers.ModelSerializer):
-    phone_number = serializers.CharField(required=True,
-                                   validators=[validators.UniqueValidator(queryset=User.objects)])
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
+class RegisterSerializer(ModelSerializer):
+    password = CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = CharField(write_only=True, required=True)
 
     class Meta:
         model = User
-        fields = ('username', 'phone_number', 'password', 'password2', 'first_name', 'last_name')
-        extra_kwargs = {
-            'first_name': {'required': True},
-            'last_name': {'required': True}
-        }
+        fields = (
+            'username', 'phone_number', 'password', 'password2', 'location', 'first_name', 'last_name', 'user_type')
+        required_fields = ('first_name', 'last_name')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise ValidationError({"password": "Password fields didn't match."})
 
         return attrs
 
@@ -62,10 +53,10 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 
-class ChangePasswordSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
-    password2 = serializers.CharField(write_only=True, required=True)
-    old_password = serializers.CharField(write_only=True, required=True)
+class ChangePasswordSerializer(ModelSerializer):
+    password = CharField(write_only=True, required=True, validators=[validate_password])
+    password2 = CharField(write_only=True, required=True)
+    old_password = CharField(write_only=True, required=True)
 
     class Meta:
         model = User
@@ -73,21 +64,21 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "Password fields didn't match."})
+            raise ValidationError({"password": "Password fields didn't match."})
 
         return attrs
 
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise serializers.ValidationError({"old_password": "Old password is not correct"})
+            raise ValidationError({"old_password": "Old password is not correct"})
         return value
 
     def update(self, instance, validated_data):
         user = self.context['request'].user
 
         if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this users."})
+            raise ValidationError({"authorize": "You dont have permission for this user."})
 
         instance.set_password(validated_data['password'])
         instance.save()
@@ -95,65 +86,15 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
         return instance
 
 
-class UpdateUserSerializer(serializers.ModelSerializer):
-    phone_number = serializers.CharField(required=True)
-
+class ChangeAccountSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'phone_number')
-        extra_kwargs = {
-            'first_name': {'required': True},
-            'last_name': {'required': True},
-        }
-
-    def validate_username(self, value):
-        user = self.context['request'].user
-        if User.objects.exclude(pk=user.pk).filter(username=value).exists():
-            raise serializers.ValidationError({"username": "This username is already in use."})
-        return value
-
-    def validate_phone_number(self, value):
-        user = self.context['request'].user
-        if User.objects.exclude(pk=user.pk).filter(phone_number=value).exists():
-            raise serializers.ValidationError({"phone number": "This phone number is already in use."})
-        return value
-
-    def update(self, instance, validated_data):
-        user = self.context['request'].user
-
-        if user.pk != instance.pk:
-            raise serializers.ValidationError({"authorize": "You dont have permission for this users."})
-
-        instance.first_name = validated_data['first_name']
-        instance.last_name = validated_data['last_name']
-        instance.phone_number = validated_data['phone_number']
-        instance.username = validated_data['username']
-
-        instance.save()
-
-        return instance
+        fields = ('username', 'phone_number', 'first_name', 'last_name', 'profile_image', 'job',
+                  'instagram_profile', 'facebook_profile', 'twitter_profile', 'about_me', 'location', 'gender',
+                  'user_type')
 
 
-class EmployeeModelSerializer(serializers.ModelSerializer):
+class ForgotPasswordSerializer(ModelSerializer):
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'phone_number', 'password')
-
-
-class EmployerModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'phone_number', 'password', 'date_joined')
-
-
-class ExperienceModelSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Experience
-        fields = ('profession', 'company', 'date', 'description', 'users')
-
-
-class AbilityModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Ability
-        fields = ('title', 'description')
+        fields = ['username', 'phone_number']

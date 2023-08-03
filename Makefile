@@ -12,3 +12,15 @@ unmig:
 	@echo "Deleting database migrations except __init__.py..."
 	find . -path "*/migrations/*.py" -not -name "__init__.py" -delete
 	@echo "Database migrations deleted."
+
+test:
+	@echo "Running tests..."
+	@python manage.py test
+
+lint:
+	@echo "Running code linting checks..."
+	@autopep8 . --recursive --in-place --pep8-passes 2000 --exclude venv
+
+format:
+	@echo "Formatting code using autopep8..."
+	@pylint . --ignore=venv --exclude migrations --disable=W0613,W0511

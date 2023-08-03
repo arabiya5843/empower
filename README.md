@@ -1,4 +1,3 @@
-```markdown
 # Empower - Job Vacancies Management Project
 
 Empower is a project developed for managing job vacancies and user orders. It provides features to create vacancies,
@@ -19,10 +18,17 @@ Before running the project, make sure you have the following dependencies instal
 
 1. Clone the repository from GitHub:
 
-```bash
-git clone https://github.com/your-username/empower.git
-cd empower
-```
+   ```bash
+   git clone https://github.com/your-username/empower.git
+   cd empower
+   ```
+
+   or
+
+   ```bash
+   git clone git@github.com:your-username/empower.git
+   cd empower
+   ```
 
 2. Install the required dependencies:
 
@@ -36,13 +42,13 @@ Create a `.env` file in the root directory and define the following environment 
 
 ```dotenv
 DJANGO_SECRET_KEY=your_django_secret_key
-DEBUG=True  # Set to False in production
+DEBUG=True# Set to False in production
 DATABASE_ENGINE=django.db.backends.postgresql_psycopg2
 POSTGRES_DB=empower
 POSTGRES_USER=your_postgres_username
 POSTGRES_PASSWORD=your_postgres_password
-DATABASE_HOST=your_database_host  # Usually 'localhost' for local development
-DATABASE_PORT=your_database_port  # Default is 5432 for PostgreSQL
+DATABASE_HOST=your_database_host# Usually 'localhost' for local development
+DATABASE_PORT=your_database_port# Default is 5432 for PostgreSQL
 ```
 
 4. Apply the database migrations:

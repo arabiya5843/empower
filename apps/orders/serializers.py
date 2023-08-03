@@ -1,4 +1,5 @@
 from rest_framework.exceptions import ValidationError
+from rest_framework.fields import HiddenField, CurrentUserDefault
 from rest_framework.serializers import ModelSerializer
 
 from apps.orders.models import UserCard
@@ -6,9 +7,11 @@ from apps.orders.models import UserCard
 
 # Serializer for the UserCard model
 class UserCardSerializer(ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+
     class Meta:
         model = UserCard
-        fields = ('card_number', 'expiration_date')
+        fields = ('card_number', 'expiration_date', 'user')
 
     # Custom validation method for the serializer
     def validate(self, attrs):

@@ -5,14 +5,18 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.users.models import User
+from shared.django.functions import validate_name
 
 
 class LoginSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
-        if User.objects.filter(username=attrs.get('username')).exists():
-            return super().validate(attrs)
-        raise ValidationError({"Not Found": "User with this username not found!"})
+        username = attrs.get('username')
+        try:
+            User.objects.get(username=username, is_active=True)
+        except User.DoesNotExist:
+            raise ValidationError({"Not Found": "User with this credentials not found or account is not active!"})
+        return super().validate(attrs)
 
     @classmethod
     def get_token(cls, user):
@@ -26,12 +30,14 @@ class LoginSerializer(TokenObtainPairSerializer):
 class RegisterSerializer(ModelSerializer):
     password = CharField(write_only=True, required=True, validators=[validate_password])
     password2 = CharField(write_only=True, required=True)
+    username = CharField(validators=[validate_name], required=True)
+    first_name = CharField(validators=[validate_name], required=True)
+    last_name = CharField(validators=[validate_name], required=True)
 
     class Meta:
         model = User
         fields = (
             'username', 'phone_number', 'password', 'password2', 'location', 'first_name', 'last_name', 'user_type')
-        required_fields = ('first_name', 'last_name')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -39,16 +45,24 @@ class RegisterSerializer(ModelSerializer):
 
         return attrs
 
+    @staticmethod
+    def validate_username(username):
+        try:
+            User.objects.get(username=username)
+            raise ValidationError({"username": "User with this username already exists."})
+        except User.DoesNotExist:
+            return username
+
     def create(self, validated_data):
-        user = User.objects.create(
+        user = User.objects.create_user(
             username=validated_data['username'],
             phone_number=validated_data['phone_number'],
             first_name=validated_data['first_name'],
-            last_name=validated_data['last_name']
+            last_name=validated_data['last_name'],
+            location=validated_data['location'],
+            user_type=validated_data['user_type'],
+            password=validated_data['password']
         )
-
-        user.set_password(validated_data['password'])
-        user.save()
 
         return user
 
@@ -75,14 +89,8 @@ class ChangePasswordSerializer(ModelSerializer):
         return value
 
     def update(self, instance, validated_data):
-        user = self.context['request'].user
-
-        if user.pk != instance.pk:
-            raise ValidationError({"authorize": "You dont have permission for this user."})
-
         instance.set_password(validated_data['password'])
         instance.save()
-
         return instance
 
 
@@ -98,3 +106,9 @@ class ForgotPasswordSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'phone_number']
+
+
+class UserModelSerializer(ModelSerializer):
+    class Meta:
+        model = User
+        exclude = ()

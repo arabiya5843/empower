@@ -5,7 +5,7 @@ from rest_framework.serializers import ModelSerializer
 from apps.employment.models import JobVacancy
 
 
-class JobVacancySerializer(ModelSerializer):
+class MyJobVacancyModelSerializer(ModelSerializer):
     # Use HiddenField with CurrentUserDefault to automatically set the user field to the current user
     user = HiddenField(default=CurrentUserDefault())
 
@@ -30,11 +30,17 @@ class JobVacancySerializer(ModelSerializer):
         user = self.context['request'].user
 
         # Check if the user has a subscription and the number of vacancies created by the user
-        if not user.has_subscription and JobVacancy.objects.filter(user=user).count() >= 3:
+        if not user.has_subscription and JobVacancy.objects.filter(user=user).count() > 2:
             raise ValidationError("You have reached the limit of vacancies without a subscription.")
         return super().validate(attrs)
 
     class Meta:
         # Use the JobVacancy model and include all fields in the serialization
+        model = JobVacancy
+        fields = '__all__'
+
+
+class JobVacancyModelSerializer(ModelSerializer):
+    class Meta:
         model = JobVacancy
         fields = '__all__'

@@ -1,14 +1,15 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.employment.views import JobVacancyViewSet
+from apps.employment.views import MyJobVacancyModelViewSet, JobVacancyReadOnlyViewSet
 
 # Create a DefaultRouter instance
 router = DefaultRouter()
 
 # Register the JobVacancyViewSet view set with the router.
 # This maps the view set to the URL pattern 'vacancies/' and assigns the name 'vacancies' to the URL pattern.
-router.register('vacancies', JobVacancyViewSet, 'vacancies')
+router.register('vacancies/my-vacancy', MyJobVacancyModelViewSet, 'my_vacancies')
+router.register('vacancies', JobVacancyReadOnlyViewSet, 'vacancies')
 
 # Define urlpatterns for the Django application
 urlpatterns = [

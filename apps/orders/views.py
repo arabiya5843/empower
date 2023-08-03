@@ -16,8 +16,8 @@ class UserCardListCreateAPIView(ListCreateAPIView):
         return UserCard.objects.filter(user_id=self.request.user.pk)
 
     # Save the current user as the owner of the card when creating
-    def perform_create(self, serializer):
-        serializer.save(user=self.request.user)
+    # def perform_create(self, serializer):
+    #     serializer.save(user=self.request.user)
 
 
 # View for deleting a user card

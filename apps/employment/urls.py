@@ -8,7 +8,8 @@ router = DefaultRouter()
 
 # Register the JobVacancyViewSet view set with the router.
 # This maps the view set to the URL pattern 'vacancies/' and assigns the name 'vacancies' to the URL pattern.
-router.register('vacancies/my-vacancy', MyJobVacancyModelViewSet, 'my_vacancies')
+router.register('vacancies/my-vacancy',
+                MyJobVacancyModelViewSet, 'my_vacancies')
 router.register('vacancies', JobVacancyReadOnlyViewSet, 'vacancies')
 
 # Define urlpatterns for the Django application

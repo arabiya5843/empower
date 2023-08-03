@@ -7,5 +7,6 @@ urlpatterns = [
     path('user-cards/', UserCardListCreateAPIView.as_view(), name='user-card-list'),
 
     # User Card Destroy View
-    path('user-cards/<int:pk>/', UserCardDestroyAPIView.as_view(), name='user-card-destroy'),
+    path('user-cards/<int:pk>/', UserCardDestroyAPIView.as_view(),
+         name='user-card-destroy'),
 ]

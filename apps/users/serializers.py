@@ -15,7 +15,8 @@ class LoginSerializer(TokenObtainPairSerializer):
         try:
             User.objects.get(username=username, is_active=True)
         except User.DoesNotExist:
-            raise ValidationError({"Not Found": "User with this credentials not found or account is not active!"})
+            raise ValidationError(
+                {"Not Found": "User with this credentials not found or account is not active!"})
         return super().validate(attrs)
 
     @classmethod
@@ -28,7 +29,8 @@ class LoginSerializer(TokenObtainPairSerializer):
 
 
 class RegisterSerializer(ModelSerializer):
-    password = CharField(write_only=True, required=True, validators=[validate_password])
+    password = CharField(write_only=True, required=True,
+                         validators=[validate_password])
     password2 = CharField(write_only=True, required=True)
     username = CharField(validators=[validate_name], required=True)
     first_name = CharField(validators=[validate_name], required=True)
@@ -41,7 +43,8 @@ class RegisterSerializer(ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise ValidationError({"password": "Password fields didn't match."})
+            raise ValidationError(
+                {"password": "Password fields didn't match."})
 
         return attrs
 
@@ -49,7 +52,8 @@ class RegisterSerializer(ModelSerializer):
     def validate_username(username):
         try:
             User.objects.get(username=username)
-            raise ValidationError({"username": "User with this username already exists."})
+            raise ValidationError(
+                {"username": "User with this username already exists."})
         except User.DoesNotExist:
             return username
 
@@ -68,7 +72,8 @@ class RegisterSerializer(ModelSerializer):
 
 
 class ChangePasswordSerializer(ModelSerializer):
-    password = CharField(write_only=True, required=True, validators=[validate_password])
+    password = CharField(write_only=True, required=True,
+                         validators=[validate_password])
     password2 = CharField(write_only=True, required=True)
     old_password = CharField(write_only=True, required=True)
 
@@ -78,14 +83,16 @@ class ChangePasswordSerializer(ModelSerializer):
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
-            raise ValidationError({"password": "Password fields didn't match."})
+            raise ValidationError(
+                {"password": "Password fields didn't match."})
 
         return attrs
 
     def validate_old_password(self, value):
         user = self.context['request'].user
         if not user.check_password(value):
-            raise ValidationError({"old_password": "Old password is not correct"})
+            raise ValidationError(
+                {"old_password": "Old password is not correct"})
         return value
 
     def update(self, instance, validated_data):

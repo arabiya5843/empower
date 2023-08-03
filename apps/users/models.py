@@ -31,13 +31,15 @@ class User(AbstractUser):
     location = CharField(max_length=50, default='Toshkent')
     abilities = ManyToManyField(Ability, related_name='users')
     has_subscription = BooleanField(default=False)
-    gender = CharField(max_length=1, choices=GENDER_CHOICES, default=GENDER_MALE)
+    gender = CharField(max_length=1, choices=GENDER_CHOICES,
+                       default=GENDER_MALE)
 
     class Type(TextChoices):
         EMPLOYEE = 'employee', 'Ishchi'
         EMPLOYER = 'employer', 'Ish beruvchi'
 
-    user_type = CharField(max_length=25, choices=Type.choices, default=Type.EMPLOYEE)
+    user_type = CharField(
+        max_length=25, choices=Type.choices, default=Type.EMPLOYEE)
 
     class Meta:
         ordering = ['-date_joined']

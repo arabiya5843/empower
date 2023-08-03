@@ -27,7 +27,8 @@ INSTALLED_APPS = [
 
     # My apps
     'apps.users',       # Custom user model and user-related functionality
-    'apps.employment',  # Functionality related to job vacancies, responsibilities, etc.
+    # Functionality related to job vacancies, responsibilities, etc.
+    'apps.employment',
     'apps.orders',      # Functionality related to user cards and orders
 
     # Third party apps
@@ -129,7 +130,8 @@ SWAGGER_SETTINGS = {
 # JWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),  # Time for Access Token
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Time for Refresh Token
+    # Time for Refresh Token
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
     'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': timedelta(minutes=5),
     # Period after Access Token expires when Refresh Token is still valid (default 5 minutes)
 }

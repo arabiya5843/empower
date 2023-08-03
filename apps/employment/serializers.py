@@ -14,7 +14,8 @@ class MyJobVacancyModelSerializer(ModelSerializer):
         # Validate that each item in the requirements array is a string
         for item in value:
             if not isinstance(item, str):
-                raise ValidationError("The requirements array must only contain strings")
+                raise ValidationError(
+                    "The requirements array must only contain strings")
         return value
 
     @staticmethod
@@ -22,7 +23,8 @@ class MyJobVacancyModelSerializer(ModelSerializer):
         # Validate that each item in the responsibilities array is a string
         for item in value:
             if not isinstance(item, str):
-                raise ValidationError("The responsibilities array must only contain strings")
+                raise ValidationError(
+                    "The responsibilities array must only contain strings")
         return value
 
     def validate(self, attrs):
@@ -31,7 +33,8 @@ class MyJobVacancyModelSerializer(ModelSerializer):
 
         # Check if the user has a subscription and the number of vacancies created by the user
         if not user.has_subscription and JobVacancy.objects.filter(user=user).count() > 2:
-            raise ValidationError("You have reached the limit of vacancies without a subscription.")
+            raise ValidationError(
+                "You have reached the limit of vacancies without a subscription.")
         return super().validate(attrs)
 
     class Meta:

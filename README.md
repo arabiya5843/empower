@@ -7,26 +7,36 @@ view job listings, manage user cards, and much more.
 
 Before running the project, make sure you have the following dependencies installed:
 
+- autopep8==2.0.2
 - Python 3.x
-- Django 3.x
-- Django Rest Framework
-- drf-yasg
-- django_filters
-- phonenumber_field
+- Django 4.2.3
+- Django Rest Framework 3.14.0
+- drf-yasg 1.21.6
+- django_filters 23.2
+- django-phonenumbers 1.0.1
+- django-phonenumber-field 7.1.0
+- Pillow 10.0.0
+- psycopg2-binary 2.9.6
+- PyJWT 2.7.0
+- PyYAML 6.0
+- python-dotenv 1.0.0
+- requests 2.31.0
+- typing_extensions 4.7.1
+- Jinja2 3.1.2
 
 ## Installation
 
 1. Clone the repository from GitHub:
 
    ```bash
-   git clone https://github.com/your-username/empower.git
+   git clone https://github.com/arabiya5843/empower.git
    cd empower
    ```
 
    or
 
    ```bash
-   git clone git@github.com:your-username/empower.git
+   git clone git@github.com:arabiya5843/empower.git
    cd empower
    ```
 
@@ -88,7 +98,7 @@ empower/
 │   ├── users/
 │   ├── employment/
 │   ├── orders/
-│   └── shared/
+│   shared/
 ├── root/
 │   ├── .env
 ├── .gitignore
@@ -98,7 +108,7 @@ empower/
 ```
 
 The project is divided into several applications, each responsible for specific functionality, such
-as `users`, `employment`, `orders`, and `shared`. More information about each application can be found in their
+as `users`, `employment` and `orders`. More information about each application can be found in their
 respective directories.
 
 ## Core Models and Functionality

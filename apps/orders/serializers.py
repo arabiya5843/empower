@@ -20,7 +20,8 @@ class UserCardSerializer(ModelSerializer):
 
         # Check if the user has a subscription and the number of cards they already have
         if not user.has_subscription and UserCard.objects.filter(user=user).count() >= 3:
-            raise ValidationError("You have reached the limit of cards without a subscription.")
+            raise ValidationError(
+                "You have reached the limit of cards without a subscription.")
 
         # Call the parent class's validate method to perform default validation
         return super().validate(attrs)
@@ -49,6 +50,7 @@ class UserCardSerializer(ModelSerializer):
     def validate_expiration_date(value):
         # Check the format of the expiration date (MM/YY)
         if not value or len(value) != 5 or not value[:2].isdigit() or not value[3:].isdigit():
-            raise ValidationError("Wrong card expiration date format. Use MM/YY format.")
+            raise ValidationError(
+                "Wrong card expiration date format. Use MM/YY format.")
 
         return value

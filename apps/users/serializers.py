@@ -1,11 +1,17 @@
 from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import ValidationError
 from rest_framework.fields import CharField
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, HyperlinkedModelSerializer
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from apps.users.models import User
 from shared.django.functions import validate_name
+
+
+class UserSerializer(HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email', 'first_name', 'last_name', 'password']
 
 
 class LoginSerializer(TokenObtainPairSerializer):

@@ -26,9 +26,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # My apps
+    'apps.ai_supportive',
     'apps.users',       # Custom user model and user-related functionality
-    # Functionality related to job vacancies, responsibilities, etc.
-    'apps.employment',
+    'apps.employment',  # Functionality related to job vacancies, responsibilities, etc.
     'apps.orders',      # Functionality related to user cards and orders
 
     # Third party apps
@@ -111,9 +111,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Django Rest Framework settings
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
+
+    'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly',
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    ],
 }
 
 # Swagger settings
@@ -130,8 +136,7 @@ SWAGGER_SETTINGS = {
 # JWT settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),  # Time for Access Token
-    # Time for Refresh Token
-    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),
+    'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Time for Refresh Token
     'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': timedelta(minutes=5),
     # Period after Access Token expires when Refresh Token is still valid (default 5 minutes)
 }

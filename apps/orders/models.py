@@ -3,7 +3,7 @@ from django.db.models import Model, ForeignKey, CASCADE, CharField
 
 # Create a model named UserCard to represent user payment cards
 class UserCard(Model):
-    # Define a foreign key to associate the card with a user.
+    # Define a foreign key,py to associate the card with a user.
     # CASCADE option means that if a user is deleted, all their associated cards will also be deleted.
     user = ForeignKey('users.User', CASCADE)
 

@@ -1,3 +1,4 @@
+from rest_framework import status
 from rest_framework.generics import CreateAPIView, UpdateAPIView, GenericAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.parsers import MultiPartParser
@@ -8,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.users.models import User
 from apps.users.serializers import LoginSerializer, RegisterSerializer, ChangePasswordSerializer, \
-    ChangeAccountSerializer, UserModelSerializer
+    ChangeAccountSerializer, UserModelSerializer, ForgotPasswordSerializer
 from shared.django.permissions import IsUserOwner
 
 
@@ -59,22 +60,33 @@ class UserChangeAccountView(UpdateAPIView):
         return Response(serializer.data)
 
 
-# class UserForgotPasswordView(UpdateAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = ForgotPasswordSerializer
-#     permission_classes = (AllowAny,)
-#
-#     def update(self, request, *args, **kwargs):
-#         partial = kwargs.pop('partial', False)
-#         instance = self.get_object()
-#         serializer = self.get_serializer(instance, data=request.data, partial=partial)
-#         serializer.is_valid(raise_exception=True)
-#
-#         # Write logic please
-#
-#         serializer.save()
-#
-#         return Response(serializer.data)
+class UserForgotPasswordView(UpdateAPIView):
+    queryset = User.objects.all()
+    serializer_class = ForgotPasswordSerializer
+    permission_classes = (AllowAny,)
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+
+        # Check if the provided email exists in the database
+        email = serializer.validated_data['email']
+        try:
+            user = User.objects.get(email=email)
+        except User.DoesNotExist:
+            return Response({'error': 'User with provided email does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Generate and send the password reset link or token
+        # You can use your preferred method here, such as sending an email with a reset link
+        # or generating a token and returning it in the API response
+        user.send_password_reset_email()
+
+        serializer.save()
+
+        return Response(serializer.data)
+
 
 class UserReadOnlyModelViewSet(ReadOnlyModelViewSet):
     queryset = User.objects.all()

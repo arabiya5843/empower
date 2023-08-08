@@ -15,7 +15,7 @@ SECRET_KEY = os_environ_get('DJANGO_SECRET_KEY')
 
 DEBUG = os_environ_get('DEBUG')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['3002']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

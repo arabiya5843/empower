@@ -59,6 +59,7 @@ POSTGRES_USER=your_postgres_username
 POSTGRES_PASSWORD=your_postgres_password
 DATABASE_HOST=your_database_host# Usually 'localhost' for local development
 DATABASE_PORT=your_database_port# Default is 5432 for PostgreSQL
+API_KEY=your_openai_api_key
 ```
 
 4. Apply the database migrations:

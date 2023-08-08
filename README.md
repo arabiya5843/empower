@@ -15,6 +15,7 @@ Before running the project, make sure you have the following dependencies instal
 - django_filters 23.2
 - django-phonenumbers 1.0.1
 - django-phonenumber-field 7.1.0
+- openai 0.27.8
 - Pillow 10.0.0
 - psycopg2-binary 2.9.6
 - PyJWT 2.7.0
@@ -202,9 +203,3 @@ If you want to contribute to the project, you can fork the repository and submit
 [Specify the license of your project, if any.]
 
 ## Authors
-
-[List the authors or contributors of the project, if applicable.]
-
-```
-
-I have included information about the `.env` file, Makefile, and steps for deploying on Linux Ubuntu. Adjust the instructions as needed based on your production environment and preferences.

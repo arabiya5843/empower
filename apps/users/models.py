@@ -1,5 +1,5 @@
 from django.contrib.auth.models import AbstractUser
-from django.db.models import TextField, CharField, Model, DateTimeField, ForeignKey, CASCADE, TextChoices, \
+from django.db.models import TextField, CharField, Model, TextChoices, \
     BooleanField, ManyToManyField, URLField, ImageField
 from phonenumber_field.modelfields import PhoneNumberField
 
@@ -10,6 +10,9 @@ class Ability(Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        db_table = 'ability'
 
 
 class User(AbstractUser):
@@ -42,18 +45,7 @@ class User(AbstractUser):
         max_length=25, choices=Type.choices, default=Type.EMPLOYEE)
 
     class Meta:
-        ordering = ['-date_joined']
+        db_table = 'user'
 
     def __str__(self):
         return self.username
-
-
-class Experience(Model):
-    profession = CharField(max_length=50)
-    company = CharField(max_length=50)
-    date = DateTimeField(auto_now_add=True)
-    description = TextField(max_length=1000)
-    user = ForeignKey('users.User', CASCADE)
-
-    def __str__(self):
-        return f"{self.profession}, {self.company}, {self.date}, {self.user.first_name}, {self.user.last_name}"

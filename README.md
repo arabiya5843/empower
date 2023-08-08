@@ -15,6 +15,7 @@ Before running the project, make sure you have the following dependencies instal
 - django_filters 23.2
 - django-phonenumbers 1.0.1
 - django-phonenumber-field 7.1.0
+- openai 0.27.8
 - Pillow 10.0.0
 - psycopg2-binary 2.9.6
 - PyJWT 2.7.0

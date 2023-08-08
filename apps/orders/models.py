@@ -16,3 +16,6 @@ class UserCard(Model):
     # Customize the representation of the model instance as a string.
     def __str__(self):
         return f"{self.card_number} - {self.expiration_date}"
+
+    class Meta:
+        db_table = 'user_card'

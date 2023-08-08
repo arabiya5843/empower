@@ -201,9 +201,3 @@ If you want to contribute to the project, you can fork the repository and submit
 [Specify the license of your project, if any.]
 
 ## Authors
-
-[List the authors or contributors of the project, if applicable.]
-
-```
-
-I have included information about the `.env` file, Makefile, and steps for deploying on Linux Ubuntu. Adjust the instructions as needed based on your production environment and preferences.

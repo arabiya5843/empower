@@ -2,7 +2,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.fields import HiddenField, CurrentUserDefault
 from rest_framework.serializers import ModelSerializer
 
-from apps.employment.models import JobVacancy
+from apps.employment.models import JobVacancy, Experience
 
 
 class MyJobVacancyModelSerializer(ModelSerializer):
@@ -35,6 +35,17 @@ class MyJobVacancyModelSerializer(ModelSerializer):
         if not user.has_subscription and JobVacancy.objects.filter(user=user).count() > 2:
             raise ValidationError(
                 "You have reached the limit of vacancies without a subscription.")
+
+        work_hours_start = attrs.get('work_hours_start')
+        work_hours_end = attrs.get('work_hours_end')
+
+        if work_hours_start and work_hours_end:
+            if work_hours_start >= work_hours_end:
+                raise ValidationError("work_hours_start must be earlier than work_hours_end.")
+        elif work_hours_start and not work_hours_end or work_hours_end and not work_hours_start:
+            raise ValidationError(
+                "If 1 of the fields about the beginning and end of the working time is filled, then the second of "
+                "them must also be filled!")
         return super().validate(attrs)
 
     class Meta:
@@ -47,3 +58,19 @@ class JobVacancyModelSerializer(ModelSerializer):
     class Meta:
         model = JobVacancy
         fields = '__all__'
+
+
+class ExperienceSerializer(ModelSerializer):
+    user = HiddenField(default=CurrentUserDefault())
+
+    class Meta:
+        model = Experience
+        fields = '__all__'
+
+    def validate(self, data):
+        user = self.context['request'].user
+
+        if not user.has_subscription and Experience.objects.filter(user=user).count() >= 20:
+            raise ValidationError("You have reached the maximum limit of experiences.")
+
+        return data

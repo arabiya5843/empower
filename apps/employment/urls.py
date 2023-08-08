@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from apps.employment.views import MyJobVacancyModelViewSet, JobVacancyReadOnlyViewSet
+from apps.employment.views import MyJobVacancyModelViewSet, JobVacancyReadOnlyViewSet, ExperienceViewSet
 
 # Create a DefaultRouter instance
 router = DefaultRouter()
@@ -11,6 +11,7 @@ router = DefaultRouter()
 router.register('vacancies/my-vacancy',
                 MyJobVacancyModelViewSet, 'my_vacancies')
 router.register('vacancies', JobVacancyReadOnlyViewSet, 'vacancies')
+router.register('experiences', ExperienceViewSet, 'experiences')
 
 # Define urlpatterns for the Django application
 urlpatterns = [

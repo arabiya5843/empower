@@ -26,16 +26,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # My apps
-    'apps.ai_supportive',
-    'apps.users',       # Custom user model and user-related functionality
-    'apps.employment',  # Functionality related to job vacancies, responsibilities, etc.
-    'apps.orders',      # Functionality related to user cards and orders
+    'apps.ai_supportive',       # This app handles AI-powered support features.
+    'apps.chat',                # This app manages chat and messaging features.
+    'apps.users',               # Custom user model and user-related functionality
+    'apps.employment',          # Functionality related to job vacancies, responsibilities, etc.
+    'apps.orders',              # Functionality related to user cards and orders
 
     # Third party apps
-    'rest_framework',           # Django Rest Framework for building APIs
+    'rest_framework',            # Django Rest Framework for building APIs
     'rest_framework_simplejwt',  # JWT-based authentication for Django Rest Framework
-    'drf_yasg',                 # Yet Another Swagger Generator for Django Rest Framework
-    'django_filters',           # Filter support for Django Rest Framework
+    'drf_yasg',                  # Yet Another Swagger Generator for Django Rest Framework
+    'django_filters',            # Filter support for Django Rest Framework
 ]
 
 MIDDLEWARE = [
@@ -135,7 +136,7 @@ SWAGGER_SETTINGS = {
 
 # JWT settings
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),  # Time for Access Token
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=45),       # Time for Access Token
     'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=1),  # Time for Refresh Token
     'SLIDING_TOKEN_REFRESH_LIFETIME_GRACE_PERIOD': timedelta(minutes=5),
     # Period after Access Token expires when Refresh Token is still valid (default 5 minutes)

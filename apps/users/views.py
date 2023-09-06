@@ -1,10 +1,9 @@
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, UpdateAPIView, GenericAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView, GenericAPIView, RetrieveAPIView
 from rest_framework.mixins import UpdateModelMixin
 from rest_framework.parsers import MultiPartParser
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from apps.users.models import User
@@ -88,7 +87,7 @@ class UserForgotPasswordView(UpdateAPIView):
         return Response(serializer.data)
 
 
-class UserReadOnlyModelViewSet(ReadOnlyModelViewSet):
+class UserRetrieveAPIView(RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserModelSerializer
     permission_classes = (IsAuthenticated,)

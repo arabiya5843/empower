@@ -45,7 +45,6 @@ class JobVacancyReadOnlyViewSet(ReadOnlyModelViewSet):
     search_fields = ('title', 'description', 'location')  # Add fields to search on
     ordering_fields = ('created_at', 'salary', 'location')  # Add fields to allow ordering
 
-
     def get_queryset(self):
         return JobVacancy.objects.order_by('created_at')
 

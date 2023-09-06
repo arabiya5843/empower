@@ -53,7 +53,7 @@ class Experience(Model):
     start_date = DateField()
     end_date = DateField()
     description = TextField(max_length=1000)
-    user = ForeignKey('users.User', on_delete=CASCADE)
+    user = ForeignKey('users.User', CASCADE)
 
     def __str__(self):
         return f"{self.profession}, {self.company}, {self.start_date}, {self.user.first_name}, {self.user.last_name}"

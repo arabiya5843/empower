@@ -15,6 +15,7 @@ Before running the project, make sure you have the following dependencies instal
 - django_filters 23.2
 - django-phonenumbers 1.0.1
 - django-phonenumber-field 7.1.0
+- openai 0.27.8
 - Pillow 10.0.0
 - psycopg2-binary 2.9.6
 - PyJWT 2.7.0
@@ -59,6 +60,7 @@ POSTGRES_USER=your_postgres_username
 POSTGRES_PASSWORD=your_postgres_password
 DATABASE_HOST=your_database_host# Usually 'localhost' for local development
 DATABASE_PORT=your_database_port# Default is 5432 for PostgreSQL
+API_KEY=your_openai_api_key
 ```
 
 4. Apply the database migrations:
